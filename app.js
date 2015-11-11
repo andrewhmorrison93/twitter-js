@@ -2,6 +2,7 @@ var express = require("express");
 var swig = require("swig");
 var app = express();
 var routes = require("./routes/");
+var socketio = require("socket.io");
 
 // //create middleware that logs the verb and the route
 app.use(function(request, response, next) {
@@ -9,7 +10,7 @@ app.use(function(request, response, next) {
 	next();
 });
 
-app.use("/", routes);
+app.use("/", routes(io));
 
 app.engine("html", swig.renderFile);
 app.set("view engine", "html");
@@ -40,7 +41,7 @@ var server = app.listen(port, function () {
 	var port = server.address().port;
 	console.log('Example app listening at http://%s:%s', host, port);
 });
-
+var io = socketio.listen(server);
 
 
 
